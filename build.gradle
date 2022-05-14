@@ -49,6 +49,33 @@ tasks.register("vpc") {
         AmazonEC2 client = AmazonEC2ClientBuilder.standard().build()
         
         // Continue here ....
+        
+        DescribeVpcsRequest request = new DescribeVpcsRequest()
+        DescribeVpcsResult result = client.describeVpcs(request)
+        for (Vpc vpc : result.getVpcs()) {
+            System.out.printf(
+                "Found VPC with id %s, " +
+                        "vpc state %s " +
+                        "tags %s" +
+                        "CIDR %s",
+                vpc.vpcId(),
+                vpc.stateAsString(),
+                vpc.instanceTenancyAsString()
+                vpc.tags(),
+                vpc.cidrBlock())
+            }  
+        DescribeVpcPeeringConnectionsRequest peerrequest = new DescribeVpcPeeringConnectionsRequest()
+        DescribeVpcPeeringConnectionsResult peerresult = client.describeVpcPeeringConnections(peerrequest)
+        for (VpcPeeringConnection peervpc : peerresult.getVpcPeeringConnections()) {
+            System.out.printf(
+                "VPC status is %s" +
+                "Requester is %s" +
+                "Accepter is %s",
+                peervpc.getStatus(),
+                peervpc.getAccepterVpcInfo().getVpcId(),
+                peervpc.getRequesterVpcInfo().getVpcId())
+            }        
+        
 
     }
 }
